@@ -2,11 +2,13 @@ import { useState, useEffect } from "react";
 import SudokuBoard from "./components/SudokuBoard";
 import Numbers from "./components/Numbers";
 import { getSudoku } from "sudoku-gen";
+import { FaCheck } from "react-icons/fa6";
+import { MdClear, MdModeEditOutline } from "react-icons/md";
 
 function App() {
   const [isEditing, setIsEditing] = useState(true);
   const [isClearing, setIsClearing] = useState(false);
-  const [activeNumber, setActiveNumber] = useState<number | null>(null);
+  const [activeNumber, setActiveNumber] = useState<number | null>(1);
   const [notes, setNotes] = useState<Set<number>[]>(
     Array(81)
       .fill(null)
@@ -73,7 +75,7 @@ function App() {
   }, []);
 
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen mt-4 sm:mt-10 md:mt-20 px-2 sm:px-4">
+    <div className="flex flex-col items-center justify-center min-h-screen px-2 sm:px-4">
       <SudokuBoard
         board={board}
         setBoard={setBoard}
@@ -89,31 +91,23 @@ function App() {
       <div className="flex gap-1.5 sm:gap-2">
         <div
           onClick={() => setIsEditing(!isEditing)}
-          className={`w-9 h-9 sm:w-10 sm:h-10 border-2 mt-4 sm:mt-10 flex items-center justify-center rounded-full cursor-pointer text-sm sm:text-base ${isEditing ? "" : "bg-blue-400"}`}
+          className={`w-14 h-9 sm:h-10 border-2 mt-4 sm:mt-10 flex items-center justify-center rounded-full cursor-pointer text-sm sm:text-base ${isEditing ? "" : "bg-blue-400"}`}
         >
-          Ed
+          <MdModeEditOutline />
         </div>
 
         <div
           onClick={() => setIsClearing(!isClearing)}
-          className={`w-9 h-9 sm:w-10 sm:h-10 border-2 mt-4 sm:mt-10 flex items-center justify-center rounded-full cursor-pointer text-sm sm:text-base ${isClearing ? "bg-blue-400" : ""}`}
+          className={`w-14 h-9 sm:h-10 border-2 mt-4 sm:mt-10 flex items-center justify-center rounded-full cursor-pointer text-sm sm:text-base ${isClearing ? "bg-blue-400" : ""}`}
         >
-          Cl
+          <MdClear />
         </div>
-
-        {/*
-        <div
-          className={`w-9 h-9 sm:w-10 sm:h-10 border-2 mt-4 sm:mt-10 flex items-center justify-center rounded-full cursor-pointer hover:bg-gray-200 text-sm sm:text-base`}
-        >
-          Un
-        </div>
-        */}
 
         <button
           onClick={validateBoard}
-          className="px-3 sm:px-4 h-9 sm:h-10 border-2 mt-4 sm:mt-10 flex items-center justify-center rounded-full cursor-pointer hover:bg-gray-200 font-medium text-sm sm:text-base"
+          className="w-14 px-3 sm:px-4 h-9 sm:h-10 border-2 mt-4 sm:mt-10 flex items-center justify-center rounded-full cursor-pointer hover:bg-gray-200 text-sm sm:text-base"
         >
-          Check
+          <FaCheck />
         </button>
       </div>
       <Numbers activeNumber={activeNumber} setActiveNumber={setActiveNumber} />

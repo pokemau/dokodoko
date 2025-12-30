@@ -10,7 +10,7 @@ const Numbers = ({ activeNumber, setActiveNumber }: NumbersProps) => {
         <div
           key={index}
           onClick={() => setActiveNumber(index + 1)}
-          className={`text-4xl w-9 h-14 sm:w-10 sm:h-14 py-4 flex items-center justify-center cursor-pointer ${index + 1 === activeNumber ? "bg-blue-200" : "hover:bg-gray-200"}`}
+          className={`rounded text-4xl w-9 h-14 sm:w-10 sm:h-14 py-4 flex items-center justify-center cursor-pointer ${index + 1 === activeNumber ? "bg-blue-200" : "hover:bg-gray-200"}`}
         >
           {index + 1}
         </div>
