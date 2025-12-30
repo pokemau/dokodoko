@@ -115,7 +115,7 @@ const SudokuCell = ({
   return (
     <div
       onClick={onCellClick}
-      className={`${borderClasses} h-12 w-12 flex items-center justify-center text-lg font-semibold ${isLocked ? "cursor-default bg-gray-100" : isWrong ? "bg-red-50 hover:cursor-pointer hover:bg-red-100" : "hover:cursor-pointer hover:bg-gray-200"} relative`}
+      className={`${borderClasses} h-9 w-9 sm:h-12 sm:w-12 flex items-center justify-center text-base sm:text-lg font-semibold ${isLocked ? "cursor-default bg-gray-100" : isWrong ? "bg-red-50 hover:cursor-pointer hover:bg-red-100" : "hover:cursor-pointer hover:bg-gray-200"} relative`}
     >
       {value ? (
         <span
@@ -134,7 +134,7 @@ const SudokuCell = ({
           {Array.from(cellNotes).map((note) => (
             <span
               key={note}
-              className={`p-0.5 absolute text-[10px] text-gray-500 ${notePositions[note - 1]}`}
+              className={`p-0 sm:p-0.5 absolute text-[8px] sm:text-[10px] text-gray-500 ${notePositions[note - 1]}`}
             >
               {note}
             </span>

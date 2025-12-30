@@ -73,7 +73,7 @@ function App() {
   }, []);
 
   return (
-    <div className="flex flex-col items-center justify-center mt-20">
+    <div className="flex flex-col items-center justify-center min-h-screen mt-4 sm:mt-10 md:mt-20 px-2 sm:px-4">
       <SudokuBoard
         board={board}
         setBoard={setBoard}
@@ -85,17 +85,17 @@ function App() {
         wrongCells={wrongCells}
         setWrongCells={setWrongCells}
       />
-      <div className="flex gap-2">
+      <div className="flex gap-1.5 sm:gap-2">
         <div
           onClick={() => setIsEditing(!isEditing)}
-          className={`w-10 h-10 border-2 mt-10 flex items-center justify-center rounded-full cursor-pointer ${isEditing ? "" : "bg-blue-400"}`}
+          className={`w-9 h-9 sm:w-10 sm:h-10 border-2 mt-4 sm:mt-10 flex items-center justify-center rounded-full cursor-pointer text-sm sm:text-base ${isEditing ? "" : "bg-blue-400"}`}
         >
           Ed
         </div>
 
         {/*
         <div
-          className={`w-10 h-10 border-2 mt-10 flex items-center justify-center rounded-full cursor-pointer hover:bg-gray-200`}
+          className={`w-9 h-9 sm:w-10 sm:h-10 border-2 mt-4 sm:mt-10 flex items-center justify-center rounded-full cursor-pointer hover:bg-gray-200 text-sm sm:text-base`}
         >
           Un
         </div>
@@ -103,7 +103,7 @@ function App() {
 
         <button
           onClick={validateBoard}
-          className="px-4 h-10 border-2 mt-10 flex items-center justify-center rounded-full cursor-pointer hover:bg-gray-200 font-medium"
+          className="px-3 sm:px-4 h-9 sm:h-10 border-2 mt-4 sm:mt-10 flex items-center justify-center rounded-full cursor-pointer hover:bg-gray-200 font-medium text-sm sm:text-base"
         >
           Check
         </button>
