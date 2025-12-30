@@ -5,6 +5,7 @@ import { getSudoku } from "sudoku-gen";
 
 function App() {
   const [isEditing, setIsEditing] = useState(true);
+  const [isClearing, setIsClearing] = useState(false);
   const [activeNumber, setActiveNumber] = useState<number | null>(null);
   const [notes, setNotes] = useState<Set<number>[]>(
     Array(81)
@@ -20,7 +21,6 @@ function App() {
     Array(81).fill(false),
   );
 
-  // Initialize puzzle on mount
   useEffect(() => {
     const sudoku = getSudoku("expert");
 
@@ -81,6 +81,7 @@ function App() {
         setNotes={setNotes}
         activeNumber={activeNumber}
         isEditing={isEditing}
+        isClearing={isClearing}
         lockedCells={lockedCells}
         wrongCells={wrongCells}
         setWrongCells={setWrongCells}
@@ -91,6 +92,13 @@ function App() {
           className={`w-9 h-9 sm:w-10 sm:h-10 border-2 mt-4 sm:mt-10 flex items-center justify-center rounded-full cursor-pointer text-sm sm:text-base ${isEditing ? "" : "bg-blue-400"}`}
         >
           Ed
+        </div>
+
+        <div
+          onClick={() => setIsClearing(!isClearing)}
+          className={`w-9 h-9 sm:w-10 sm:h-10 border-2 mt-4 sm:mt-10 flex items-center justify-center rounded-full cursor-pointer text-sm sm:text-base ${isClearing ? "bg-blue-400" : ""}`}
+        >
+          Cl
         </div>
 
         {/*
