@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
-import "./App.css";
 import SudokuBoard from "./components/SudokuBoard";
 import Numbers from "./components/Numbers";
+import { getSudoku } from "sudoku-gen";
 
 function App() {
   const [isEditing, setIsEditing] = useState(true);
@@ -12,6 +12,46 @@ function App() {
       .map(() => new Set<number>()),
   );
   const [board, setBoard] = useState<(number | null)[]>(Array(81).fill(null));
+  const [lockedCells, setLockedCells] = useState<boolean[]>(
+    Array(81).fill(false),
+  );
+  const [solution, setSolution] = useState<string>("");
+  const [wrongCells, setWrongCells] = useState<boolean[]>(
+    Array(81).fill(false),
+  );
+
+  // Initialize puzzle on mount
+  useEffect(() => {
+    const sudoku = getSudoku("expert");
+
+    const initialBoard: (number | null)[] = sudoku.puzzle
+      .split("")
+      .map((char) => {
+        if (char === "-") return null;
+        return parseInt(char);
+      });
+
+    const locked: boolean[] = sudoku.puzzle
+      .split("")
+      .map((char) => char !== "-");
+
+    setBoard(initialBoard);
+    setLockedCells(locked);
+    setSolution(sudoku.solution);
+  }, []);
+
+  const validateBoard = () => {
+    const wrong = board.map((value, index) => {
+      if (lockedCells[index]) return false;
+
+      if (value === null) return false;
+
+      const correctValue = parseInt(solution[index]);
+      return value !== correctValue;
+    });
+
+    setWrongCells(wrong);
+  };
 
   useEffect(() => {
     const handleKeyPress = (event: KeyboardEvent) => {
@@ -41,6 +81,9 @@ function App() {
         setNotes={setNotes}
         activeNumber={activeNumber}
         isEditing={isEditing}
+        lockedCells={lockedCells}
+        wrongCells={wrongCells}
+        setWrongCells={setWrongCells}
       />
       <div className="flex gap-2">
         <div
@@ -55,6 +98,13 @@ function App() {
         >
           Un
         </div>
+
+        <button
+          onClick={validateBoard}
+          className="px-4 h-10 border-2 mt-10 flex items-center justify-center rounded-full cursor-pointer hover:bg-gray-200 font-medium"
+        >
+          Check
+        </button>
       </div>
       <Numbers activeNumber={activeNumber} setActiveNumber={setActiveNumber} />
     </div>

@@ -5,6 +5,9 @@ interface SudokuBoardProps {
   setNotes: (notes: Set<number>[]) => void;
   activeNumber: number | null;
   isEditing: boolean;
+  lockedCells: boolean[];
+  wrongCells: boolean[];
+  setWrongCells: (wrongCells: boolean[]) => void;
 }
 
 const SudokuBoard = ({
@@ -14,6 +17,9 @@ const SudokuBoard = ({
   setNotes,
   activeNumber,
   isEditing,
+  lockedCells,
+  wrongCells,
+  setWrongCells,
 }: SudokuBoardProps) => {
   return (
     <div className="inline-grid grid-cols-9 gap-0 border-2 border-gray-800">
@@ -29,13 +35,22 @@ const SudokuBoard = ({
               value={board[index]}
               cellNotes={notes[index]}
               isEditing={isEditing}
+              isLocked={lockedCells[index]}
+              isWrong={wrongCells[index]}
               onCellClick={() => {
                 if (activeNumber === null) return;
+                if (lockedCells[index]) return;
 
                 if (isEditing) {
                   const newBoard = [...board];
                   newBoard[index] = activeNumber;
                   setBoard(newBoard);
+
+                  if (wrongCells[index]) {
+                    const newWrongCells = [...wrongCells];
+                    newWrongCells[index] = false;
+                    setWrongCells(newWrongCells);
+                  }
                 } else {
                   const newNotes = [...notes];
                   const currentNotes = new Set(notes[index]);
@@ -63,6 +78,8 @@ const SudokuCell = ({
   col,
   value,
   cellNotes,
+  isLocked,
+  isWrong,
   onCellClick,
 }: {
   row: number;
@@ -71,6 +88,8 @@ const SudokuCell = ({
   value: number | null;
   cellNotes: Set<number>;
   isEditing: boolean;
+  isLocked: boolean;
+  isWrong: boolean;
   onCellClick: () => void;
 }) => {
   const borderClasses = [
@@ -96,16 +115,26 @@ const SudokuCell = ({
   return (
     <div
       onClick={onCellClick}
-      className={`${borderClasses} h-12 w-12 flex items-center justify-center text-lg font-semibold hover:cursor-pointer hover:bg-gray-200 relative`}
+      className={`${borderClasses} h-12 w-12 flex items-center justify-center text-lg font-semibold ${isLocked ? "cursor-default bg-gray-100" : isWrong ? "bg-red-50 hover:cursor-pointer hover:bg-red-100" : "hover:cursor-pointer hover:bg-gray-200"} relative`}
     >
       {value ? (
-        <span>{value}</span>
+        <span
+          className={
+            isLocked
+              ? "text-black font-bold"
+              : isWrong
+                ? "text-red-600"
+                : "text-blue-600"
+          }
+        >
+          {value}
+        </span>
       ) : (
         <>
           {Array.from(cellNotes).map((note) => (
             <span
               key={note}
-              className={`p-[2px] absolute text-[10px] text-gray-500 ${notePositions[note - 1]}`}
+              className={`p-0.5 absolute text-[10px] text-gray-500 ${notePositions[note - 1]}`}
             >
               {note}
             </span>
