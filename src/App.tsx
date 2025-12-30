@@ -93,11 +93,13 @@ function App() {
           Ed
         </div>
 
+        {/*
         <div
           className={`w-10 h-10 border-2 mt-10 flex items-center justify-center rounded-full cursor-pointer hover:bg-gray-200`}
         >
           Un
         </div>
+        */}
 
         <button
           onClick={validateBoard}
