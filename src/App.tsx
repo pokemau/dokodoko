@@ -5,7 +5,7 @@ import { BoardControls } from "./components/BoardControls";
 import { getSudoku } from "sudoku-gen";
 
 function App() {
-  const [isNoting, setIsNoting] = useState(false);
+  const [isTakingNotes, setIsTakingNotes] = useState(false);
   const [isClearing, setIsClearing] = useState(false);
   const [activeNumber, setActiveNumber] = useState<number | null>(1);
   const [notes, setNotes] = useState<Set<number>[]>(
@@ -82,7 +82,7 @@ function App() {
       }
 
       if (key.toLowerCase() === "e") {
-        setIsNoting((prev) => !prev);
+        setIsTakingNotes((prev) => !prev);
       }
 
       if (key.toLowerCase() === "x") {
@@ -126,7 +126,7 @@ function App() {
         notes={notes}
         setNotes={setNotes}
         activeNumber={activeNumber}
-        isNoting={isNoting}
+        isTakingNotes={isTakingNotes}
         isClearing={isClearing}
         lockedCells={lockedCells}
         wrongCells={wrongCells}
@@ -134,8 +134,8 @@ function App() {
         numberCounts={calculateNumberCounts()}
       />
       <BoardControls
-        isEditing={isNoting}
-        onEditToggle={() => setIsNoting(!isNoting)}
+        isTakingNotes={isTakingNotes}
+        onEditToggle={() => setIsTakingNotes(!isTakingNotes)}
         isClearing={isClearing}
         onClearToggle={() => setIsClearing(!isClearing)}
         onValidate={validateBoard}

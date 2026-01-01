@@ -3,7 +3,7 @@ import ClearButton from "./ClearButton";
 import CheckButton from "./CheckButton";
 
 interface BoardControlsProps {
-  isEditing: boolean;
+  isTakingNotes: boolean;
   onEditToggle: () => void;
   isClearing: boolean;
   onClearToggle: () => void;
@@ -11,7 +11,7 @@ interface BoardControlsProps {
 }
 
 export default function BoardControls({
-  isEditing,
+  isTakingNotes,
   onEditToggle,
   isClearing,
   onClearToggle,
@@ -19,7 +19,7 @@ export default function BoardControls({
 }: BoardControlsProps) {
   return (
     <div className="flex gap-2 mt-8">
-      <EditButton isEditing={isEditing} onToggle={onEditToggle} />
+      <EditButton isTakingNotes={isTakingNotes} onToggle={onEditToggle} />
       <ClearButton isClearing={isClearing} onToggle={onClearToggle} />
       <CheckButton onClick={onValidate} />
     </div>

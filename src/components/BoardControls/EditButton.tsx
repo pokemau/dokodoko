@@ -2,15 +2,15 @@ import { MdModeEditOutline } from "react-icons/md";
 import ControlButton from "./ControlButton";
 
 interface EditButtonProps {
-  isEditing: boolean;
+  isTakingNotes: boolean;
   onToggle: () => void;
 }
 
-export default function EditButton({ isEditing, onToggle }: EditButtonProps) {
+export default function EditButton({ isTakingNotes, onToggle }: EditButtonProps) {
   return (
     <ControlButton
       icon={<MdModeEditOutline />}
-      isActive={isEditing}
+      isActive={isTakingNotes}
       onClick={onToggle}
       variant="toggle"
       ariaLabel="Toggle edit mode"

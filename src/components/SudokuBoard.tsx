@@ -4,7 +4,7 @@ interface SudokuBoardProps {
   notes: Set<number>[];
   setNotes: (notes: Set<number>[]) => void;
   activeNumber: number | null;
-  isNoting: boolean;
+  isTakingNotes: boolean;
   isClearing: boolean;
   lockedCells: boolean[];
   wrongCells: boolean[];
@@ -18,7 +18,7 @@ const SudokuBoard = ({
   notes,
   setNotes,
   activeNumber,
-  isNoting,
+  isTakingNotes,
   isClearing,
   lockedCells,
   wrongCells,
@@ -38,7 +38,7 @@ const SudokuBoard = ({
               col={col}
               value={board[index]}
               cellNotes={notes[index]}
-              isNoting={isNoting}
+              isTakingNotes={isTakingNotes}
               isLocked={lockedCells[index]}
               isWrong={wrongCells[index]}
               onCellClick={() => {
@@ -74,7 +74,7 @@ const SudokuBoard = ({
                 // Prevent placing numbers that have reached the limit
                 if (numberCounts[activeNumber - 1] >= 9) return;
 
-                if (!isNoting) {
+                if (!isTakingNotes) {
                   const newBoard = [...board];
                   newBoard[index] = activeNumber;
                   setBoard(newBoard);
@@ -120,7 +120,7 @@ const SudokuCell = ({
   activeNumber: number | null;
   value: number | null;
   cellNotes: Set<number>;
-  isNoting: boolean;
+  isTakingNotes: boolean;
   isLocked: boolean;
   isWrong: boolean;
   onCellClick: () => void;
