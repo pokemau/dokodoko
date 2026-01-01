@@ -148,7 +148,7 @@ const SudokuCell = ({
   return (
     <div
       onClick={onCellClick}
-      className={`${borderClasses} h-9 w-9 sm:h-12 sm:w-12 flex items-center justify-center text-base sm:text-lg font-normal ${isLocked ? "cursor-default bg-gray-100" : isWrong ? "bg-red-50 hover:cursor-pointer hover:bg-red-100" : "hover:cursor-pointer hover:bg-gray-200"} relative`}
+      className={`${borderClasses} h-9 w-9 sm:h-12 sm:w-12 flex items-center justify-center text-base sm:text-lg font-normal ${isLocked ? "cursor-default bg-gray-100" : isWrong ? "bg-red-50 hover:cursor-pointer hover:bg-red-100" : "hover:cursor-pointer hover:bg-gray-200"} relative select-none`}
     >
       {value ? (
         <span

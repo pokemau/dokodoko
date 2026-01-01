@@ -15,11 +15,11 @@ const Numbers = ({ activeNumber, setActiveNumber, numberCounts }: NumbersProps) 
           <div
             key={index}
             onClick={() => !isDisabled && setActiveNumber(number)}
-            className={`rounded text-4xl w-9 h-14 sm:w-10 sm:h-14 py-4 flex items-center justify-center ${isDisabled
-                ? "bg-gray-300 text-gray-500 cursor-not-allowed"
-                : number === activeNumber
-                  ? "bg-blue-200 cursor-pointer"
-                  : "hover:bg-gray-200 cursor-pointer"
+            className={`rounded text-4xl w-9 h-14 sm:w-10 sm:h-14 py-4 flex items-center justify-center select-none ${isDisabled
+              ? "bg-gray-300 text-gray-500 cursor-not-allowed"
+              : number === activeNumber
+                ? "bg-blue-200 cursor-pointer"
+                : "hover:bg-gray-200 cursor-pointer"
               }`}
           >
             {number}
