@@ -1,9 +1,8 @@
 import { useState, useEffect } from "react";
 import SudokuBoard from "./components/SudokuBoard";
 import Numbers from "./components/Numbers";
+import { BoardControls } from "./components/BoardControls";
 import { getSudoku } from "sudoku-gen";
-import { FaCheck } from "react-icons/fa6";
-import { MdClear, MdModeEditOutline } from "react-icons/md";
 
 function App() {
   const [isEditing, setIsEditing] = useState(true);
@@ -134,28 +133,13 @@ function App() {
         setWrongCells={setWrongCells}
         numberCounts={calculateNumberCounts()}
       />
-      <div className="flex gap-1.5 sm:gap-2">
-        <div
-          onClick={() => setIsEditing(!isEditing)}
-          className={`w-14 h-9 sm:h-10 border-2 mt-4 sm:mt-10 flex items-center justify-center rounded-full cursor-pointer text-sm sm:text-base ${isEditing ? "" : "bg-blue-400"}`}
-        >
-          <MdModeEditOutline />
-        </div>
-
-        <div
-          onClick={() => setIsClearing(!isClearing)}
-          className={`w-14 h-9 sm:h-10 border-2 mt-4 sm:mt-10 flex items-center justify-center rounded-full cursor-pointer text-sm sm:text-base ${isClearing ? "bg-blue-400" : ""}`}
-        >
-          <MdClear />
-        </div>
-
-        <button
-          onClick={validateBoard}
-          className="w-14 px-3 sm:px-4 h-9 sm:h-10 border-2 mt-4 sm:mt-10 flex items-center justify-center rounded-full cursor-pointer hover:bg-gray-200 text-sm sm:text-base"
-        >
-          <FaCheck />
-        </button>
-      </div>
+      <BoardControls
+        isEditing={isEditing}
+        onEditToggle={() => setIsEditing(!isEditing)}
+        isClearing={isClearing}
+        onClearToggle={() => setIsClearing(!isClearing)}
+        onValidate={validateBoard}
+      />
       <Numbers
         activeNumber={activeNumber}
         setActiveNumber={setActiveNumber}
