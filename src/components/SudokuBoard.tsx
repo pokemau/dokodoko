@@ -9,6 +9,7 @@ interface SudokuBoardProps {
   lockedCells: boolean[];
   wrongCells: boolean[];
   setWrongCells: (wrongCells: boolean[]) => void;
+  numberCounts: number[];
 }
 
 const SudokuBoard = ({
@@ -22,6 +23,7 @@ const SudokuBoard = ({
   lockedCells,
   wrongCells,
   setWrongCells,
+  numberCounts,
 }: SudokuBoardProps) => {
   return (
     <div className="inline-grid grid-cols-9 gap-0 border-2 border-gray-800">
@@ -68,6 +70,9 @@ const SudokuBoard = ({
                 }
 
                 if (activeNumber === null) return;
+
+                // Prevent placing numbers that have reached the limit
+                if (numberCounts[activeNumber - 1] >= 9) return;
 
                 if (isEditing) {
                   const newBoard = [...board];
@@ -149,12 +154,11 @@ const SudokuCell = ({
         <span
           className={`
             text-3xl sm:text-4xl
-            ${
-              isLocked
-                ? "text-black"
-                : isWrong
-                  ? "text-red-600"
-                  : "text-blue-600"
+            ${isLocked
+              ? "text-black"
+              : isWrong
+                ? "text-red-600"
+                : "text-blue-600"
             }
           `}
         >

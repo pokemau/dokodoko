@@ -42,6 +42,22 @@ function App() {
     setSolution(sudoku.solution);
   }, []);
 
+  const calculateNumberCounts = () => {
+    const counts = Array(9).fill(0);
+
+    board.forEach((value, index) => {
+      if (value === null) return;
+      if (wrongCells[index]) return;
+
+      const correctValue = parseInt(solution[index]);
+      if (value === correctValue) {
+        counts[value - 1]++;
+      }
+    });
+
+    return counts;
+  };
+
   const validateBoard = () => {
     const wrong = board.map((value, index) => {
       if (lockedCells[index]) return false;
@@ -59,11 +75,23 @@ function App() {
     const handleKeyPress = (event: KeyboardEvent) => {
       const key = event.key;
       if (key >= "1" && key <= "9") {
-        setActiveNumber(parseInt(key));
+        const number = parseInt(key);
+        const counts = calculateNumberCounts();
+        if (counts[number - 1] < 9) {
+          setActiveNumber(number);
+        }
       }
 
       if (key.toLowerCase() === "e") {
         setIsEditing((prev) => !prev);
+      }
+
+      if (key.toLowerCase() === "x") {
+        setIsClearing((prev) => !prev);
+      }
+
+      if (key.toLowerCase() === "c") {
+        validateBoard();
       }
     };
 
@@ -72,7 +100,24 @@ function App() {
     return () => {
       window.removeEventListener("keydown", handleKeyPress);
     };
-  }, []);
+  }, [board, solution, lockedCells, wrongCells]);
+
+  useEffect(() => {
+    if (activeNumber === null) return;
+
+    const counts = calculateNumberCounts();
+    if (counts[activeNumber - 1] >= 9) {
+      // Find next available number
+      let nextNumber = null;
+      for (let i = 1; i <= 9; i++) {
+        if (counts[i - 1] < 9) {
+          nextNumber = i;
+          break;
+        }
+      }
+      setActiveNumber(nextNumber);
+    }
+  }, [board, wrongCells]);
 
   return (
     <div className="flex flex-col items-center justify-center min-h-screen px-2 sm:px-4">
@@ -87,6 +132,7 @@ function App() {
         lockedCells={lockedCells}
         wrongCells={wrongCells}
         setWrongCells={setWrongCells}
+        numberCounts={calculateNumberCounts()}
       />
       <div className="flex gap-1.5 sm:gap-2">
         <div
@@ -110,7 +156,11 @@ function App() {
           <FaCheck />
         </button>
       </div>
-      <Numbers activeNumber={activeNumber} setActiveNumber={setActiveNumber} />
+      <Numbers
+        activeNumber={activeNumber}
+        setActiveNumber={setActiveNumber}
+        numberCounts={calculateNumberCounts()}
+      />
     </div>
   );
 }
