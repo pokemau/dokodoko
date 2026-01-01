@@ -45,27 +45,27 @@ const SudokuBoard = ({
                 if (lockedCells[index]) return;
 
                 if (isClearing) {
-                  const hasWrongAnswer = board[index] !== null && wrongCells[index];
+                  const hasValue = board[index] !== null;
                   const hasNotes = notes[index].size > 0;
 
-                  if (hasWrongAnswer || hasNotes) {
+                  if (!hasValue && !hasNotes) return;
 
-                    if (hasWrongAnswer) {
-                      const newBoard = [...board];
-                      newBoard[index] = null;
-                      setBoard(newBoard);
+                  if (hasValue) {
+                    const newBoard = [...board];
+                    newBoard[index] = null;
+                    setBoard(newBoard);
 
-                      const newWrongCells = [...wrongCells];
-                      newWrongCells[index] = false;
-                      setWrongCells(newWrongCells);
-                    }
-
-                    if (hasNotes) {
-                      const newNotes = [...notes];
-                      newNotes[index] = new Set<number>();
-                      setNotes(newNotes);
-                    }
+                    const newWrongCells = [...wrongCells];
+                    newWrongCells[index] = false;
+                    setWrongCells(newWrongCells);
                   }
+
+                  if (hasNotes) {
+                    const newNotes = [...notes];
+                    newNotes[index] = new Set<number>();
+                    setNotes(newNotes);
+                  }
+
                   return;
                 }
 
