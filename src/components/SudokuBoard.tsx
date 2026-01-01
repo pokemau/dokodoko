@@ -169,7 +169,7 @@ const SudokuCell = ({
           {Array.from(cellNotes).map((note) => (
             <span
               key={note}
-              className={`px-0.5 absolute text-[8px] sm:text-[10px] text-gray-500 ${notePositions[note - 1]}`}
+              className={`px-0.5 absolute font-bold text-[9px] sm:text-[10px] text-gray-500 ${notePositions[note - 1]}`}
             >
               {note}
             </span>
