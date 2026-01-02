@@ -82,6 +82,9 @@ function App() {
       }
 
       if (key.toLowerCase() === "e") {
+        if (isClearing)
+          setIsClearing(prev => !prev);
+
         setIsTakingNotes((prev) => !prev);
       }
 
@@ -135,7 +138,10 @@ function App() {
       />
       <BoardControls
         isTakingNotes={isTakingNotes}
-        onEditToggle={() => setIsTakingNotes(!isTakingNotes)}
+        onEditToggle={() => {
+          if (isClearing) setIsClearing(prev => !prev);
+          setIsTakingNotes(!isTakingNotes);
+        }}
         isClearing={isClearing}
         onClearToggle={() => setIsClearing(!isClearing)}
         onValidate={validateBoard}

@@ -18,7 +18,7 @@ export default function ControlButton({
   tooltip,
 }: ControlButtonProps) {
   const baseClasses =
-    "relative group w-14 h-10 flex items-center justify-center rounded-lg cursor-pointer transition-all duration-200 ease-in-out border-2";
+    "relative group w-14 h-10 flex items-center justify-center rounded-lg cursor-pointer border-2";
 
   const variantClasses = {
     toggle: isActive
@@ -28,7 +28,7 @@ export default function ControlButton({
       "bg-white text-gray-700 border-gray-300 hover:bg-green-50 hover:border-green-400 hover:shadow-sm active:bg-green-100",
   };
 
-  const iconClasses = "text-xl transition-transform duration-200 group-hover:scale-110";
+  const iconClasses = "text-xl group-hover:scale-110";
 
   return (
     <button
@@ -40,7 +40,7 @@ export default function ControlButton({
       <span className={iconClasses}>{icon}</span>
 
       {/* Tooltip */}
-      <div className="absolute -bottom-8 left-1/2 -translate-x-1/2 bg-gray-900 text-white text-xs px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none whitespace-nowrap">
+      <div className="absolute -bottom-8 left-1/2 -translate-x-1/2 bg-gray-900 text-white text-xs px-2 py-1 rounded opacity-0 group-hover:opacity-100 pointer-events-none whitespace-nowrap">
         {tooltip}
       </div>
     </button>
