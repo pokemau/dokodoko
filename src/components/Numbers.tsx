@@ -2,14 +2,15 @@ interface NumbersProps {
   activeNumber: number | null;
   setActiveNumber: (value: number | null) => void;
   numberCounts: number[];
+  isTakingNotes: boolean;
 }
 
-const Numbers = ({ activeNumber, setActiveNumber, numberCounts }: NumbersProps) => {
+const Numbers = ({ activeNumber, setActiveNumber, numberCounts, isTakingNotes }: NumbersProps) => {
   return (
     <div className="flex gap-0.5 sm:gap-1 mt-4 sm:mt-10">
       {Array.from({ length: 9 }).map((_, index) => {
         const number = index + 1;
-        const isDisabled = numberCounts[index] >= 9;
+        const isDisabled = numberCounts[index] >= 9 && !isTakingNotes;
 
         return (
           <div

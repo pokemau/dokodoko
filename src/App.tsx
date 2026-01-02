@@ -76,7 +76,7 @@ function App() {
       if (key >= "1" && key <= "9") {
         const number = parseInt(key);
         const counts = calculateNumberCounts();
-        if (counts[number - 1] < 9) {
+        if (counts[number - 1] < 9 || isTakingNotes) {
           setActiveNumber(number);
         }
       }
@@ -102,7 +102,7 @@ function App() {
     return () => {
       window.removeEventListener("keydown", handleKeyPress);
     };
-  }, [board, solution, lockedCells, wrongCells]);
+  }, [board, solution, lockedCells, wrongCells, isTakingNotes]);
 
   useEffect(() => {
     if (activeNumber === null) return;
@@ -150,6 +150,7 @@ function App() {
         activeNumber={activeNumber}
         setActiveNumber={setActiveNumber}
         numberCounts={calculateNumberCounts()}
+        isTakingNotes={isTakingNotes}
       />
     </div>
   );
