@@ -10,6 +10,7 @@ interface SudokuBoardProps {
   wrongCells: boolean[];
   setWrongCells: (wrongCells: boolean[]) => void;
   numberCounts: number[];
+  isPaused: boolean;
 }
 
 const SudokuBoard = ({
@@ -24,83 +25,93 @@ const SudokuBoard = ({
   wrongCells,
   setWrongCells,
   numberCounts,
+  isPaused,
 }: SudokuBoardProps) => {
   return (
-    <div className="inline-grid grid-cols-9 gap-0 border-2 border-gray-800">
-      {Array.from({ length: 9 }).map((_, row) =>
-        Array.from({ length: 9 }).map((_, col) => {
-          const index = row * 9 + col;
-          return (
-            <SudokuCell
-              key={`${row}-${col}`}
-              activeNumber={activeNumber}
-              row={row}
-              col={col}
-              value={board[index]}
-              cellNotes={notes[index]}
-              isTakingNotes={isTakingNotes}
-              isLocked={lockedCells[index]}
-              isWrong={wrongCells[index]}
-              onCellClick={() => {
-                if (lockedCells[index]) return;
+    <div className="relative">
+      <div className="inline-grid grid-cols-9 gap-0 border-2 border-gray-800">
+        {Array.from({ length: 9 }).map((_, row) =>
+          Array.from({ length: 9 }).map((_, col) => {
+            const index = row * 9 + col;
+            return (
+              <SudokuCell
+                key={`${row}-${col}`}
+                activeNumber={activeNumber}
+                row={row}
+                col={col}
+                value={board[index]}
+                cellNotes={notes[index]}
+                isTakingNotes={isTakingNotes}
+                isLocked={lockedCells[index]}
+                isWrong={wrongCells[index]}
+                isPaused={isPaused}
+                onCellClick={() => {
+                  if (isPaused) return;
+                  if (lockedCells[index]) return;
 
-                if (isClearing) {
-                  const hasValue = board[index] !== null;
-                  const hasNotes = notes[index].size > 0;
+                  if (isClearing) {
+                    const hasValue = board[index] !== null;
+                    const hasNotes = notes[index].size > 0;
 
-                  if (!hasValue && !hasNotes) return;
+                    if (!hasValue && !hasNotes) return;
 
-                  if (hasValue) {
+                    if (hasValue) {
+                      const newBoard = [...board];
+                      newBoard[index] = null;
+                      setBoard(newBoard);
+
+                      const newWrongCells = [...wrongCells];
+                      newWrongCells[index] = false;
+                      setWrongCells(newWrongCells);
+                    }
+
+                    if (hasNotes) {
+                      const newNotes = [...notes];
+                      newNotes[index] = new Set<number>();
+                      setNotes(newNotes);
+                    }
+
+                    return;
+                  }
+
+                  if (activeNumber === null) return;
+
+                  // Prevent placing numbers that have reached the limit
+                  if (numberCounts[activeNumber - 1] >= 9) return;
+
+                  if (!isTakingNotes) {
                     const newBoard = [...board];
-                    newBoard[index] = null;
+                    newBoard[index] = activeNumber;
                     setBoard(newBoard);
 
-                    const newWrongCells = [...wrongCells];
-                    newWrongCells[index] = false;
-                    setWrongCells(newWrongCells);
-                  }
-
-                  if (hasNotes) {
+                    if (wrongCells[index]) {
+                      const newWrongCells = [...wrongCells];
+                      newWrongCells[index] = false;
+                      setWrongCells(newWrongCells);
+                    }
+                  } else {
                     const newNotes = [...notes];
-                    newNotes[index] = new Set<number>();
+                    const currentNotes = new Set(notes[index]);
+
+                    if (currentNotes.has(activeNumber)) {
+                      currentNotes.delete(activeNumber);
+                    } else {
+                      currentNotes.add(activeNumber);
+                    }
+
+                    newNotes[index] = currentNotes;
                     setNotes(newNotes);
                   }
-
-                  return;
-                }
-
-                if (activeNumber === null) return;
-
-                // Prevent placing numbers that have reached the limit
-                if (numberCounts[activeNumber - 1] >= 9) return;
-
-                if (!isTakingNotes) {
-                  const newBoard = [...board];
-                  newBoard[index] = activeNumber;
-                  setBoard(newBoard);
-
-                  if (wrongCells[index]) {
-                    const newWrongCells = [...wrongCells];
-                    newWrongCells[index] = false;
-                    setWrongCells(newWrongCells);
-                  }
-                } else {
-                  const newNotes = [...notes];
-                  const currentNotes = new Set(notes[index]);
-
-                  if (currentNotes.has(activeNumber)) {
-                    currentNotes.delete(activeNumber);
-                  } else {
-                    currentNotes.add(activeNumber);
-                  }
-
-                  newNotes[index] = currentNotes;
-                  setNotes(newNotes);
-                }
-              }}
-            />
-          );
-        }),
+                }}
+              />
+            );
+          }),
+        )}
+      </div>
+      {isPaused && (
+        <div className="absolute inset-0 bg-gray-900/90 flex items-center justify-center">
+          <p className="text-white text-2xl font-semibold">Game Paused</p>
+        </div>
       )}
     </div>
   );
@@ -123,6 +134,7 @@ const SudokuCell = ({
   isTakingNotes: boolean;
   isLocked: boolean;
   isWrong: boolean;
+  isPaused: boolean;
   onCellClick: () => void;
 }) => {
   const borderClasses = [

@@ -2,6 +2,8 @@ import { useState, useEffect } from "react";
 import SudokuBoard from "./components/SudokuBoard";
 import Numbers from "./components/Numbers";
 import { BoardControls } from "./components/BoardControls";
+import Timer from "./components/Timer";
+import PauseButton from "./components/PauseButton";
 import { getSudoku } from "sudoku-gen";
 
 function App() {
@@ -21,6 +23,8 @@ function App() {
   const [wrongCells, setWrongCells] = useState<boolean[]>(
     Array(81).fill(false),
   );
+  const [isPaused, setIsPaused] = useState(false);
+  const [elapsedTime, setElapsedTime] = useState(0);
 
   useEffect(() => {
     const sudoku = getSudoku("expert");
@@ -39,7 +43,19 @@ function App() {
     setBoard(initialBoard);
     setLockedCells(locked);
     setSolution(sudoku.solution);
+    setElapsedTime(0);
   }, []);
+
+  // Timer
+  useEffect(() => {
+    if (isPaused) return;
+
+    const interval = setInterval(() => {
+      setElapsedTime((prev) => prev + 1);
+    }, 1000);
+
+    return () => clearInterval(interval);
+  }, [isPaused]);
 
   const calculateNumberCounts = () => {
     const counts = Array(9).fill(0);
@@ -72,6 +88,8 @@ function App() {
 
   useEffect(() => {
     const handleKeyPress = (event: KeyboardEvent) => {
+      if (isPaused) return;
+
       const key = event.key;
       if (key >= "1" && key <= "9") {
         const number = parseInt(key);
@@ -95,6 +113,10 @@ function App() {
       if (key.toLowerCase() === "c") {
         validateBoard();
       }
+
+      if (key.toLowerCase() === "p") {
+        setIsPaused((prev) => !prev);
+      }
     };
 
     window.addEventListener("keydown", handleKeyPress);
@@ -102,7 +124,7 @@ function App() {
     return () => {
       window.removeEventListener("keydown", handleKeyPress);
     };
-  }, [board, solution, lockedCells, wrongCells, isTakingNotes]);
+  }, [board, solution, lockedCells, wrongCells, isTakingNotes, isPaused]);
 
   useEffect(() => {
     if (activeNumber === null) return;
@@ -123,6 +145,10 @@ function App() {
 
   return (
     <div className="flex flex-col items-center justify-center min-h-screen px-2 sm:px-4">
+      <div className="flex items-center justify-center gap-4 mb-4">
+        <Timer elapsedTime={elapsedTime} />
+        <PauseButton isPaused={isPaused} onToggle={() => setIsPaused(!isPaused)} />
+      </div>
       <SudokuBoard
         board={board}
         setBoard={setBoard}
@@ -135,6 +161,7 @@ function App() {
         wrongCells={wrongCells}
         setWrongCells={setWrongCells}
         numberCounts={calculateNumberCounts()}
+        isPaused={isPaused}
       />
       <BoardControls
         isTakingNotes={isTakingNotes}
